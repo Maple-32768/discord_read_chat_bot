@@ -1,0 +1,2 @@
+# discord_read_chat_bot
+Discordサーバーで指定したチャット欄を読み上げるbotのソースコード
