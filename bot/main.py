@@ -1,33 +1,3 @@
-Skip to content
-Search or jump to…
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@Maple-32768 
-Maple-32768
-/
-discord_read_chat_bot
-1
-00
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security
-Insights
-Settings
-discord_read_chat_bot/src/main.py /
-@Maple-32768
-Maple-32768 Update main.py
-Latest commit 0d63436 2 minutes ago
- History
- 1 contributor
-174 lines (145 sloc)  5.05 KB
-  
 import bot_token as d_token
 import discord
 from discord.ext import commands
@@ -202,15 +172,3 @@ def savefile(file_path, read_text, speaker):
 
 
 client.run(TOKEN)
-© 2021 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
