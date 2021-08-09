@@ -129,11 +129,6 @@ async def on_message(message):
         if received_text.startswith('//') or received_text.startswith('!'):
             return
 
-        if message.author.name == 'やどかりん':
-            if not voice_client.is_playing():
-                voice_client.play(discord.FFmpegPCMAudio(executable=ffmpeg_exe,source=audio_file, options = "-loglevel panic"))
-            return
-
         if re.match(url_pattern, received_text):
             if not voice_client.is_playing():
                 voice_client.play(discord.FFmpegPCMAudio(executable=ffmpeg_exe,source=audio_file, options = "-loglevel panic"))
