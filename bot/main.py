@@ -115,36 +115,59 @@ async def switch_read_long(ctx):
 async def srl(ctx):
     await switch_read_long(ctx)
 
+#メッセージを受け取ったイベント
 @client.event
 async def on_message(message):
+    #コンソールに出力(なくてもいい)
     print('Message caught')
     print('  ' + str(message.author.name) + ' : ' + message.content)
+    
+    #メッセージがコマンドかもしれないからコマンドとして実行させる
     await client.process_commands(message)
+
+    #参加してない場合やbotからのメッセージは無視
     if not is_joined or message.author.bot:
         return
 
+    #メッセージを受信したチャンネルが読み上げ対象チャンネルだった場合
+    #(念の為再生クライアントの存在も確認)
     if message.channel is text_channel and voice_client:
 
+        #受け取ったメッセージをreceived_textに代入
         received_text = message.content
+
+        #received_textが//とか！で始まってる場合はコマンドとして無視
         if received_text.startswith('//') or received_text.startswith('!'):
             return
 
+        #メッセージがurlのパターンにマッチするなら専用音声を流して処理中断
         if re.match(url_pattern, received_text):
             if not voice_client.is_playing():
                 voice_client.play(discord.FFmpegPCMAudio(executable=ffmpeg_exe,source=audio_file, options = "-loglevel panic"))
             return
 
+        #記号とか都合の悪い文字は読み替えるか消してしまおう(上の方のreplace_letters参照)
         for l in replace_letters:
             received_text = received_text.replace(l, replace_letters[l])
 
-
+        #メッセージが-lで始まってるなら長文モードなので-lを除去
         if received_text.startswith('-l'):
             received_text = received_text.replace('-l', '')
+
+        #長文モードじゃなくて、設定で長文モードが無効にされていたら40文字以降は切り捨てて以下略を追加
         elif not is_read_long_sentence and len(received_text) > 40:
             received_text = received_text[0:40] + '以下略'
+
+        #コンソール出力
         print('Generating audio file...')
+
+        #処理したテキストでオーディオファイル生成
         result = generate_audio(received_text)
+
+        #コンソール出力
         print('Playing audio file...')
+
+        #オーディオファイル生成が正常に完了していたらffmpeg.exeを用いて音声ファイルを再生
         if result is None:
             voice_client.play(discord.FFmpegPCMAudio(executable=ffmpeg_exe,source=audio_file, options = "-loglevel panic"))
       
